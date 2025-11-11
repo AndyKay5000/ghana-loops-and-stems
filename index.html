@@ -169,7 +169,15 @@
       "Praise-Hi-life",
       "REGGAE_root_94bpm",
       "Worship-Chimes-by-Bensax",
-      "Church-worship"
+      "Church-worship",
+      "Bongo_Reggae_Loop_83Bpm",
+      "AFRIC_SUD",
+      "Afro_Pop_loop",
+      "Gospel_Praise_Loop_136.90bpm",
+      "Hommies_6-8",
+      "Ewe_loop",
+      "Reggae_Session_Loopz",
+      "WORSHIP-114BPM"
     ];
 
     const container = document.getElementById('loops-container');
@@ -192,7 +200,7 @@
       container.appendChild(div);
     });
 
-    // Search with highlight + auto-scroll + no results message
+    // Search functionality
     const searchInput = document.getElementById('searchInput');
     const noResults = document.getElementById('noResults');
 
@@ -207,12 +215,12 @@
         const originalText = loopNameEl.textContent;
         const lowerText = originalText.toLowerCase();
 
-        if(lowerText.includes(searchTerm) && searchTerm !== "") {
+        if (lowerText.includes(searchTerm) && searchTerm !== "") {
           const regex = new RegExp(`(${searchTerm})`, "gi");
           loopNameEl.innerHTML = originalText.replace(regex, '<mark>$1</mark>');
           item.style.display = '';
           matches++;
-          if(!firstMatch) firstMatch = item;
+          if (!firstMatch) firstMatch = item;
         } else if (searchTerm === "") {
           loopNameEl.innerHTML = originalText;
           item.style.display = '';
@@ -222,11 +230,8 @@
         }
       });
 
-      // Show or hide no results message
       noResults.style.display = matches === 0 ? 'block' : 'none';
-
-      // Scroll first match into view
-      if(firstMatch) {
+      if (firstMatch) {
         firstMatch.scrollIntoView({ behavior: 'smooth', block: 'center' });
       }
     });
@@ -234,7 +239,7 @@
     // Back to Top
     const backToTop = document.getElementById('backToTop');
     window.onscroll = function() {
-      if(document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+      if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
         backToTop.style.display = "block";
       } else {
         backToTop.style.display = "none";
