@@ -252,4 +252,222 @@
   </script>
 
 </body>
+</html>    /* Description */
+    p.description {
+      margin: 15px 20px 20px;
+      font-size: 16px;
+      color: #333;
+    }
+
+    /* Search bar */
+    input[type="text"] {
+      padding: 10px;
+      width: 80%;
+      max-width: 400px;
+      margin-bottom: 20px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 16px;
+    }
+
+    /* Section title */
+    h2 {
+      color: #444;
+      margin: 30px 0 10px;
+    }
+
+    /* Loops container */
+    .loops-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 25px;
+      padding: 0 10px 40px;
+    }
+
+    /* Loop cards */
+    .loop-item {
+      background-color: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      width: 260px;
+      transition: transform 0.2s, box-shadow 0.2s;
+      position: relative;
+    }
+    .loop-item:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+    }
+    .loop-item audio {
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    /* Download buttons */
+    .loop-item a {
+      display: inline-block;
+      margin-top: 10px;
+      padding: 10px 15px;
+      background-color: royalblue;
+      color: white;
+      text-decoration: none;
+      border-radius: 6px;
+      margin-right: 5px;
+      font-weight: bold;
+      font-size: 14px;
+      transition: background-color 0.2s;
+    }
+    .loop-item a:hover {
+      background-color: darkblue;
+    }
+
+    /* Back to top button */
+    #backToTop {
+      position: fixed;
+      bottom: 30px;
+      right: 20px;
+      display: none;
+      padding: 12px 18px;
+      background-color: royalblue;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      z-index: 1000;
+      transition: background-color 0.2s;
+    }
+    #backToTop:hover {
+      background-color: darkblue;
+    }
+
+    /* Highlight search matches */
+    mark {
+      background-color: yellow;
+      color: black;
+      font-weight: bold;
+    }
+
+    /* No results message */
+    #noResults {
+      display: none;
+      font-size: 18px;
+      color: #555;
+      margin-top: 30px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <img src="logo.jpg" alt="My Logo">
+    <h1>Ghana Loops & Stems</h1>
+  </header>
+
+  <p class="description">Welcome! Preview and download high-quality loops and stems from Ghana. Use the search bar to find your loops quickly.</p>
+
+  <!-- Search bar -->
+  <input type="text" id="searchInput" placeholder="Search for a loop...">
+
+  <h2>Loops & Stems</h2>
+  <div id="loops-container" class="loops-container"></div>
+
+  <p id="noResults">No loops found matching your search.</p>
+
+  <!-- Back to Top Button -->
+  <button id="backToTop" onclick="scrollToTop()">↑ Top</button>
+
+  <script>
+    const files = [
+      "Chant-loop",
+      "ReggaeExt",
+      "3-4-Worship-loop",
+      "Praise-Hi-life",
+      "REGGAE_root_94bpm",
+      "Worship-Chimes-by-Bensax",
+      "Church-worship",
+      "Bongo_Reggae_Loop_83Bpm",
+      "AFRIC_SUD",
+      "Afro_Pop_loop",
+      "Gospel_Praise_Loop_136.90bpm",
+      "Hommies_6-8",
+      "Ewe_loop",
+      "Reggae_Session_Loopz",
+      "WORSHIP-114BPM"
+    ];
+
+    const container = document.getElementById('loops-container');
+
+    // Create loop cards
+    files.forEach(name => {
+      const div = document.createElement('div');
+      div.className = 'loop-item';
+      div.innerHTML = `
+        <p class="loop-name"><strong>${name}</strong></p>
+        <audio controls>
+          <source src="loops/${name}.mp3" type="audio/mpeg">
+          <source src="loops/${name}.m4a" type="audio/mp4">
+          Your browser does not support the audio element.
+        </audio>
+        <br>
+        <a href="loops/${name}.mp3" download>Download MP3</a>
+        <a href="loops/${name}.m4a" download>Download M4A</a>
+      `;
+      container.appendChild(div);
+    });
+
+    // Search functionality
+    const searchInput = document.getElementById('searchInput');
+    const noResults = document.getElementById('noResults');
+
+    searchInput.addEventListener('input', function() {
+      const searchTerm = searchInput.value.toLowerCase();
+      const loopItems = document.querySelectorAll('.loop-item');
+      let firstMatch = null;
+      let matches = 0;
+
+      loopItems.forEach(item => {
+        const loopNameEl = item.querySelector('.loop-name strong');
+        const originalText = loopNameEl.textContent;
+        const lowerText = originalText.toLowerCase();
+
+        if (lowerText.includes(searchTerm) && searchTerm !== "") {
+          const regex = new RegExp(`(${searchTerm})`, "gi");
+          loopNameEl.innerHTML = originalText.replace(regex, '<mark>$1</mark>');
+          item.style.display = '';
+          matches++;
+          if (!firstMatch) firstMatch = item;
+        } else if (searchTerm === "") {
+          loopNameEl.innerHTML = originalText;
+          item.style.display = '';
+          matches++;
+        } else {
+          item.style.display = 'none';
+        }
+      });
+
+      noResults.style.display = matches === 0 ? 'block' : 'none';
+      if (firstMatch) {
+        firstMatch.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    });
+
+    // Back to Top
+    const backToTop = document.getElementById('backToTop');
+    window.onscroll = function() {
+      if (document.body.scrollTop > 200 || document.documentElement.scrollTop > 200) {
+        backToTop.style.display = "block";
+      } else {
+        backToTop.style.display = "none";
+      }
+    };
+    function scrollToTop() {
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
+    }
+  </script>
+
+</body>
 </html>
